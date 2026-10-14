@@ -99,7 +99,7 @@
     $("mes").innerHTML =
       item("Já recebido no mês", mes.jaRecebido, "Já está no saldo") +
       item("Ainda vai entrar", mes.entra) +
-      item("Custos do dia a dia", -mes.custosDia, mes.diasTrabalhados + (mes.diasTrabalhados === 1 ? " dia trabalhado" : " dias trabalhados") + (mes.diasMarmita ? " · " + mes.diasMarmita + " com marmita" : "")) +
+      item("Custos do dia a dia", -mes.custosDia, mes.diasTrabalhados + (mes.diasTrabalhados === 1 ? " dia trabalhado" : " dias trabalhados") + (mes.diasMarmita ? " · " + mes.diasMarmita + " com marmita" : "") + (mes.diasSemTransporte ? " · " + mes.diasSemTransporte + " sem transporte" : "")) +
       item("Outros gastos lançados", -mes.outros) +
       item("Sobra (entra − sai)", mes.sobra) +
       item("Saldo da conta no último dia", mes.saldoFim) +
@@ -204,9 +204,18 @@
     var folgas = dados.dias.filter(function (d) { return d.trabalha === false && d.data >= R.inicio && d.data <= R.mes.fimMes; })
       .sort(function (a, b) { return a.data < b.data ? -1 : 1; })
       .map(function (d) { return MB.diaMes(d.data) + (d.motivo ? " (" + d.motivo + ")" : ""); });
-    var itens = cfg.custos_dia.map(function (i) { return MB.esc(i.nome) + " " + MB.dinheiro(i.valor); }).join(" + ");
-    var temMarmita = cfg.custos_dia.some(function (i) { return i.marmita; });
+    var vigentes = Projecao.itensDoDia(cfg, R.inicio);
+    var itens = vigentes.map(function (i) { return MB.esc(i.nome) + " " + MB.dinheiro(i.valor); }).join(" + ");
+    var temMarmita = vigentes.some(function (i) { return i.tipo === "marmita"; });
+    var transporte = Projecao.nomeTransporte(cfg, R.inicio);
     var entradas = dados.lancamentos.filter(function (l) { return l.tipo === "entrada" && l.data >= R.inicio && l.data <= R.mes.fimMes; });
+    // Mudanças programadas (ex.: Uber até 14/12, Gasolina desde 15/12).
+    var mudancas = [];
+    cfg.custos_dia.forEach(function (i) {
+      if (i.desde && i.desde > R.inicio) mudancas.push({ data: i.desde, texto: "a partir de " + MB.data(i.desde) + " entra <b>" + MB.esc(i.nome) + "</b> (" + MB.dinheiro(i.valor) + ")" });
+      if (i.ate && i.ate >= R.inicio) mudancas.push({ data: i.ate, texto: "depois de " + MB.data(i.ate) + " sai <b>" + MB.esc(i.nome) + "</b>" });
+    });
+    mudancas.sort(function (a, b) { return a.data < b.data ? -1 : 1; });
 
     var lista = [
       s.vazio
@@ -214,13 +223,15 @@
         : "O saldo de <b>" + MB.dinheiro(s.conta) + "</b> já inclui tudo até <b>" + MB.data(s.data) + "</b>. A projeção conta de " + MB.data(R.inicio) + " em diante.",
       "Você trabalha <b>" + (nomesDias.join(", ") || "nenhum dia") + "</b>: são <b>" + R.mes.diasTrabalhados + " dias</b> de " + MB.diaMes(R.inicio) + " até o fim do mês" + (folgas.length ? ", sem " + MB.esc(folgas.join(", ")) : "") + ".",
       itens
-        ? "Por dia trabalhado: " + itens + " = <b>" + MB.dinheiro(R.custo.pedindo) + "</b>" + (temMarmita ? " (" + MB.dinheiro(R.custo.levando) + " levando marmita; marque no Dia a dia)." : ".")
+        ? "Por dia trabalhado: " + itens + " = <b>" + MB.dinheiro(R.custo.pedindo) + "</b>" + (temMarmita ? " (" + MB.dinheiro(R.custo.levando) + " levando marmita)" : "") +
+          ". No Dia a dia dá para marcar " + [temMarmita ? "marmita" : "", transporte ? "sem " + transporte.toLowerCase() : "", "outro valor no dia"].filter(Boolean).join(", ") + "."
         : "Nenhum gasto por dia trabalhado cadastrado.",
+      mudancas.length ? "Mudança programada: " + mudancas.map(function (m) { return m.texto; }).join("; ") + "." : "",
       entradas.length
         ? "Até o fim do mês entram <b>" + entradas.length + "</b> recebimentos, somando " + MB.dinheiro(R.mes.entra) + "."
         : "Nenhum recebimento lançado até o fim do mês.",
       "Gastos fixos (aluguel, contas, cartão) só entram na conta se estiverem lançados em <a class=\"link\" href=\"/painel/gastos/\">Gastos</a>."
     ];
-    $("premissas").innerHTML = lista.map(function (t) { return "<li>" + t + "</li>"; }).join("");
+    $("premissas").innerHTML = lista.filter(Boolean).map(function (t) { return "<li>" + t + "</li>"; }).join("");
   }
 })();

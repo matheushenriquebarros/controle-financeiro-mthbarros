@@ -77,8 +77,12 @@ where not exists (select 1 from public.fin_perfis);
 -- ---------------------------------------------------------------------
 -- Ajustes de cada pessoa (equivalem às premissas da aba Resumo).
 -- dias_semana: 1 = segunda … 7 = domingo.
--- custos_dia:  [{ "nome": "Uber de ida", "valor": 20, "marmita": false }]
---              marmita = true → não gasta nos dias em que levou marmita.
+-- custos_dia:  [{ "id": "uber-ida", "nome": "Uber de ida", "valor": 20,
+--                 "tipo": "transporte", "desde": null, "ate": null }]
+--              tipo marmita    → não sai nos dias em que levou marmita
+--              tipo transporte → não sai nos dias marcados "sem Uber"
+--              tipo fixo       → sai em todo dia trabalhado
+--              desde/ate       → período em que o gasto vale (ex.: carro)
 -- ganhos_dia:  [{ "nome": "Vale alimentação", "valor": 25 }]
 --              pagos de uma vez no dia_beneficio, pelos dias trabalhados.
 -- ---------------------------------------------------------------------
@@ -129,15 +133,21 @@ create index if not exists idx_fin_lancamentos on public.fin_lancamentos (user_i
 --   trabalha false = folga / feriado (motivo opcional)
 --   trabalha true  = trabalhou num dia que normalmente não trabalha
 --   marmita true   = levou marmita (não gasta alimentação)
+--   sem_transporte = não foi de Uber/transporte naquele dia
+--   valores        = { "uber-ida": 27 } valor de um gasto só naquele dia
 -- ---------------------------------------------------------------------
 create table if not exists public.fin_dias (
-  user_id   uuid not null references auth.users (id) on delete cascade default auth.uid(),
-  data      date not null,
-  trabalha  boolean null,
-  marmita   boolean not null default false,
-  motivo    text not null default '',
+  user_id         uuid not null references auth.users (id) on delete cascade default auth.uid(),
+  data            date not null,
+  trabalha        boolean null,
+  marmita         boolean not null default false,
+  sem_transporte  boolean not null default false,
+  valores         jsonb not null default '{}'::jsonb,
+  motivo          text not null default '',
   primary key (user_id, data)
 );
+alter table public.fin_dias add column if not exists sem_transporte boolean not null default false;
+alter table public.fin_dias add column if not exists valores jsonb not null default '{}'::jsonb;
 
 -- ---------------------------------------------------------------------
 -- Segurança (RLS): só quem foi aprovado, e só os próprios dados.

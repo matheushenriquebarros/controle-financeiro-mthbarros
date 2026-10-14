@@ -18,7 +18,10 @@
     $("form-config").addEventListener("input", marcarAlterado);
     $("form-config").addEventListener("change", aoMudarConfig);
     $("form-config").addEventListener("click", aoClicarConfig);
-    $("mais-custo").addEventListener("click", function () { cfg.custos_dia.push({ nome: "", valor: 0, marmita: false }); desenharItens(); focarUltimo("custos"); marcarAlterado(); });
+    $("mais-custo").addEventListener("click", function () {
+      cfg.custos_dia.push({ id: "c" + Date.now().toString(36), nome: "", valor: 0, tipo: "fixo", desde: null, ate: null });
+      desenharItens(); focarUltimo("custos"); marcarAlterado();
+    });
     $("mais-ganho").addEventListener("click", function () { cfg.ganhos_dia.push({ nome: "", valor: 0 }); desenharItens(); focarUltimo("ganhos"); marcarAlterado(); });
     $("botao-saldo").addEventListener("click", function () {
       MB.atualizarSaldo(saldos[0] ? { conta: Number(saldos[0].conta), caixinha: Number(saldos[0].caixinha) } : null).then(function (novo) {
@@ -65,27 +68,55 @@
     desenharItens();
   }
 
-  function linhaItem(lista, i, item, comMarmita) {
-    return '<div class="item-lista' + (comMarmita ? "" : " sem-chave") + '" data-lista="' + lista + '" data-i="' + i + '">' +
+  function linhaItem(lista, i, item) {
+    return '<div class="item-lista sem-chave" data-lista="' + lista + '" data-i="' + i + '">' +
       '<input class="campo" data-c="nome" value="' + MB.esc(item.nome) + '" placeholder="Nome" aria-label="Nome">' +
       '<div class="campo-prefixo"><span>R$</span><input class="campo num" data-c="valor" inputmode="decimal" value="' + MB.decimal(item.valor) + '" aria-label="Valor"></div>' +
-      (comMarmita ? '<label class="chave" title="Não sai nos dias em que você leva marmita"><input type="checkbox" data-c="marmita"' + (item.marmita ? " checked" : "") + '><i></i><span class="suave">Some com marmita</span></label>' : "") +
       '<button class="botao-icone perigo" type="button" data-remover title="Remover" aria-label="Remover ' + MB.esc(item.nome || "item") + '">' + MB.icone("lixeira") + "</button>" +
     "</div>";
   }
 
+  var TIPOS = [
+    ["marmita", "Alimentação · some com marmita"],
+    ["transporte", "Transporte · botão Uber no dia a dia"],
+    ["fixo", "Fixo · todo dia trabalhado"]
+  ];
+
+  /* Gasto por dia trabalhado: nome, valor, tipo e período (de/até). */
+  function linhaCusto(i, item) {
+    var hoje = MB.hoje();
+    var situacao = item.ate && item.ate < hoje ? '<span class="tag no-saldo">Encerrado</span>'
+      : item.desde && item.desde > hoje ? '<span class="tag previsto">A partir de ' + MB.diaMes(item.desde) + "</span>" : "";
+    return '<div class="item-custo" data-lista="custos_dia" data-i="' + i + '">' +
+      '<div class="item-lista sem-chave">' +
+        '<input class="campo" data-c="nome" value="' + MB.esc(item.nome) + '" placeholder="Ex.: Gasolina (ida e volta)" aria-label="Nome">' +
+        '<div class="campo-prefixo"><span>R$</span><input class="campo num" data-c="valor" inputmode="decimal" value="' + MB.decimal(item.valor) + '" aria-label="Valor por dia"></div>' +
+        '<button class="botao-icone perigo" type="button" data-remover title="Remover" aria-label="Remover ' + MB.esc(item.nome || "item") + '">' + MB.icone("lixeira") + "</button>" +
+      "</div>" +
+      '<div class="item-custo-extra">' +
+        '<select class="selecao" data-c="tipo" aria-label="Tipo">' + TIPOS.map(function (t) {
+          return '<option value="' + t[0] + '"' + (item.tipo === t[0] ? " selected" : "") + ">" + t[1] + "</option>";
+        }).join("") + "</select>" +
+        '<label class="periodo"><span>De</span><input class="campo" type="date" data-c="desde" value="' + (item.desde || "") + '" aria-label="Vale a partir de"></label>' +
+        '<label class="periodo"><span>Até</span><input class="campo" type="date" data-c="ate" value="' + (item.ate || "") + '" aria-label="Vale até"></label>' +
+        situacao +
+      "</div>" +
+    "</div>";
+  }
+
   function desenharItens() {
-    $("custos").innerHTML = cfg.custos_dia.map(function (x, i) { return linhaItem("custos_dia", i, x, true); }).join("") ||
+    $("custos").innerHTML = cfg.custos_dia.map(function (x, i) { return linhaCusto(i, x); }).join("") ||
       '<div class="vazio pequeno">Nenhum gasto por dia trabalhado.</div>';
-    $("ganhos").innerHTML = cfg.ganhos_dia.map(function (x, i) { return linhaItem("ganhos_dia", i, x, false); }).join("") ||
+    $("ganhos").innerHTML = cfg.ganhos_dia.map(function (x, i) { return linhaItem("ganhos_dia", i, x); }).join("") ||
       '<div class="vazio pequeno">Nenhum ganho por dia trabalhado.</div>';
     desenharSomas();
   }
 
   function desenharSomas() {
-    var c = Projecao.custoPorDia(cfg);
-    var temMarmita = cfg.custos_dia.some(function (x) { return x.marmita; });
-    $("soma-custos").innerHTML = "Por dia <b>" + MB.dinheiro(c.pedindo) + "</b>" + (temMarmita ? " · levando marmita <b>" + MB.dinheiro(c.levando) + "</b>" : "");
+    var hoje = MB.hoje();
+    var c = Projecao.custoPorDia(cfg, hoje);
+    var temMarmita = Projecao.itensDoDia(cfg, hoje).some(function (x) { return x.tipo === "marmita"; });
+    $("soma-custos").innerHTML = "Hoje, por dia <b>" + MB.dinheiro(c.pedindo) + "</b>" + (temMarmita ? " · levando marmita <b>" + MB.dinheiro(c.levando) + "</b>" : "");
     var g = cfg.ganhos_dia.reduce(function (t, x) { return t + (Number(x.valor) || 0); }, 0);
     $("soma-ganhos").innerHTML = "Por dia <b>" + MB.dinheiro(g) + "</b>";
   }
@@ -109,7 +140,9 @@
     var campo = el.getAttribute("data-c");
     if (campo === "nome") item.nome = el.value.trim();
     if (campo === "valor") item.valor = MB.lerNumero(el.value);
-    if (campo === "marmita") item.marmita = el.checked;
+    if (campo === "tipo") item.tipo = el.value;
+    if (campo === "desde") item.desde = el.value || null;
+    if (campo === "ate") item.ate = el.value || null;
   }
 
   function aoClicarConfig(ev) {
@@ -128,6 +161,8 @@
     cfg.custos_dia = limpar(cfg.custos_dia);
     cfg.ganhos_dia = limpar(cfg.ganhos_dia).map(function (x) { return { nome: x.nome, valor: Number(x.valor) || 0 }; });
     cfg.dia_beneficio = Math.max(1, Math.min(31, Number($("dia-beneficio").value) || 5));
+    var invertido = cfg.custos_dia.filter(function (x) { return x.desde && x.ate && x.desde > x.ate; })[0];
+    if (invertido) return MB.aviso(invertido.nome + ": a data \"de\" está depois da \"até\".", true);
 
     var botao = $("salvar-config");
     botao.disabled = true;

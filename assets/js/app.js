@@ -111,6 +111,7 @@
     };
     for (var k in mapa) if (msg.indexOf(k) > -1) return mapa[k];
     if (/row-level security/i.test(msg)) return "Sem permissão para isso. Seu acesso foi aprovado?";
+    if (/sem_transporte|'valores' column/i.test(msg)) return "Banco desatualizado: rode database/migracoes/001-transporte-e-valor-do-dia.sql no Supabase.";
     if (/fin_\w+.*(does not exist|Could not find)|Could not find the table 'public\.fin_/i.test(msg)) return "Banco não preparado: rode database/schema.sql no Supabase.";
     return msg;
   }
@@ -138,6 +139,7 @@
     baixar: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
     ok: '<path d="M20 6 9 17l-5-5"/>',
     carteira: '<path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>',
+    carro: '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>',
     marmita: '<path d="M3 11h18v6a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M5 11V9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2M12 4v3"/>',
     sol: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-2.93 1.41-1.41M17.66 6.34l1.41-1.41M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41"/>',
     lua: '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
@@ -291,15 +293,21 @@
   };
 
   /* Grava (ou apaga, se voltou ao padrão) a exceção de um dia. */
+  MB.diaVazio = function (dia) {
+    return dia.trabalha == null && !dia.marmita && !dia.sem_transporte && !dia.motivo &&
+      !Object.keys(dia.valores || {}).length;
+  };
+
   MB.salvarDia = function (dia) {
     var sb = MB.supabase;
-    var vazio = dia.trabalha == null && !dia.marmita && !dia.motivo;
-    if (vazio) return sb.from("fin_dias").delete().eq("data", dia.data).then(function (r) { if (r.error) throw r.error; return null; });
+    if (MB.diaVazio(dia)) return sb.from("fin_dias").delete().eq("data", dia.data).then(function (r) { if (r.error) throw r.error; return null; });
     return sb.from("fin_dias").upsert({
       user_id: MB.usuario.id,
       data: dia.data,
       trabalha: dia.trabalha,
       marmita: !!dia.marmita,
+      sem_transporte: !!dia.sem_transporte,
+      valores: dia.valores || {},
       motivo: dia.motivo || ""
     }, { onConflict: "user_id,data" }).select().single().then(function (r) {
       if (r.error) throw r.error;

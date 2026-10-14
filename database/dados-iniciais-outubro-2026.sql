@@ -18,9 +18,9 @@ begin
   values (
     dono,
     '{1,2,3,4,5}',
-    '[{"nome":"Alimentação (pedindo marmita)","valor":20,"marmita":true},
-      {"nome":"Uber de ida","valor":20,"marmita":false},
-      {"nome":"Uber de volta","valor":20,"marmita":false}]'::jsonb,
+    '[{"id":"alimentacao","nome":"Alimentação (pedindo marmita)","valor":20,"tipo":"marmita","desde":null,"ate":null},
+      {"id":"uber-ida","nome":"Uber de ida","valor":20,"tipo":"transporte","desde":null,"ate":null},
+      {"id":"uber-volta","nome":"Uber de volta","valor":20,"tipo":"transporte","desde":null,"ate":null}]'::jsonb,
     '[{"nome":"Vale alimentação","valor":25},
       {"nome":"Ajuda de custo","valor":12}]'::jsonb,
     5

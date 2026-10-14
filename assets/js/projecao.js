@@ -37,12 +37,24 @@
   var r = function (cent) { return cent / 100; };
 
   /* ---------- Ajustes ---------- */
+  /*
+    Gastos por dia trabalhado:
+      { id, nome, valor, tipo, desde, ate }
+      tipo  "marmita"    → não sai no dia em que levou marmita
+            "transporte" → não sai no dia marcado "sem Uber/transporte"
+            "fixo"       → sai em todo dia trabalhado
+      desde/ate (opcionais, "AAAA-MM-DD") → período em que o gasto vale.
+      Ex.: Uber até 14/12; Gasolina desde 15/12 (quando começar de carro).
+    Formato antigo { marmita: true } vira tipo "marmita".
+  */
+  P.TIPOS_CUSTO = ["marmita", "transporte", "fixo"];
+
   P.CONFIG_PADRAO = {
     dias_semana: [1, 2, 3, 4, 5],
     custos_dia: [
-      { nome: "Alimentação (pedindo marmita)", valor: 20, marmita: true },
-      { nome: "Uber de ida", valor: 20, marmita: false },
-      { nome: "Uber de volta", valor: 20, marmita: false }
+      { id: "alimentacao", nome: "Alimentação (pedindo marmita)", valor: 20, tipo: "marmita" },
+      { id: "uber-ida", nome: "Uber de ida", valor: 20, tipo: "transporte" },
+      { id: "uber-volta", nome: "Uber de volta", valor: 20, tipo: "transporte" }
     ],
     ganhos_dia: [
       { nome: "Vale alimentação", valor: 25 },
@@ -51,18 +63,53 @@
     dia_beneficio: 5
   };
 
+  P.normalizarItem = function (i, n) {
+    var tipo = P.TIPOS_CUSTO.indexOf(i.tipo) > -1 ? i.tipo
+      : i.marmita ? "marmita"
+      : /uber|99|taxi|táxi|ônibus|onibus|metr|gasolina|combust|estacion|ped[aá]gio/i.test(i.nome || "") ? "transporte"
+      : "fixo";
+    return {
+      id: i.id || "item-" + (n + 1),
+      nome: i.nome || "",
+      valor: Number(i.valor) || 0,
+      tipo: tipo,
+      desde: i.desde || null,
+      ate: i.ate || null
+    };
+  };
+
   P.normalizarConfig = function (cfg) {
     cfg = cfg || {};
     var base = P.CONFIG_PADRAO;
+    var custos = Array.isArray(cfg.custos_dia) ? cfg.custos_dia : JSON.parse(JSON.stringify(base.custos_dia));
     return {
       dias_semana: Array.isArray(cfg.dias_semana) ? cfg.dias_semana.map(Number) : base.dias_semana.slice(),
-      custos_dia: Array.isArray(cfg.custos_dia) ? cfg.custos_dia : JSON.parse(JSON.stringify(base.custos_dia)),
+      custos_dia: custos.map(P.normalizarItem),
       ganhos_dia: Array.isArray(cfg.ganhos_dia) ? cfg.ganhos_dia : JSON.parse(JSON.stringify(base.ganhos_dia)),
       dia_beneficio: Number(cfg.dia_beneficio) || base.dia_beneficio
     };
   };
 
-  /* Lista de fin_dias → { "2026-10-12": {trabalha:false, marmita:false, motivo:"…"} } */
+  /* O gasto vale nesta data? (período "desde/até") */
+  P.itemVale = function (i, data) {
+    return (!i.desde || data >= i.desde) && (!i.ate || data <= i.ate);
+  };
+
+  P.itensDoDia = function (cfg, data) {
+    return cfg.custos_dia.filter(function (i) { return P.itemVale(i, data); });
+  };
+
+  /* Nome do botão de transporte no dia: "Uber" se só tem Uber, senão "Transporte". */
+  P.nomeTransporte = function (cfg, data) {
+    var t = P.itensDoDia(cfg, data).filter(function (i) { return i.tipo === "transporte"; });
+    if (!t.length) return "";
+    return t.every(function (i) { return /uber/i.test(i.nome); }) ? "Uber" : "Transporte";
+  };
+
+  /*
+    Lista de fin_dias → { "2026-10-12": {trabalha, marmita, sem_transporte, valores, motivo} }
+    valores = { "uber-ida": 27 } → valor daquele gasto só naquele dia.
+  */
   P.mapaDias = function (lista) {
     var m = {};
     (lista || []).forEach(function (d) { m[String(d.data).slice(0, 10)] = d; });
@@ -77,12 +124,35 @@
     return P.trabalhaPadrao(data, cfg);
   };
 
+  /*
+    Gastos de um dia trabalhado (cada item com o valor do dia).
+    info = exceção do dia (fin_dias) ou {}.
+  */
+  P.custosDoDia = function (cfg, data, info) {
+    info = info || {};
+    var valores = info.valores || {};
+    return P.itensDoDia(cfg, data).map(function (i) {
+      var fora = (i.tipo === "marmita" && info.marmita) || (i.tipo === "transporte" && info.sem_transporte);
+      var ajustado = valores[i.id] != null && valores[i.id] !== "";
+      return {
+        id: i.id,
+        nome: i.nome,
+        tipo: i.tipo,
+        padrao: i.valor,
+        valor: fora ? 0 : ajustado ? Number(valores[i.id]) || 0 : i.valor,
+        fora: !!fora,
+        ajustado: !fora && ajustado
+      };
+    });
+  };
+
   /* Custos de um dia trabalhado: com e sem marmita (Resumo!B23 e B24). */
-  P.custoPorDia = function (cfg) {
+  P.custoPorDia = function (cfg, data) {
     var pedindo = 0, levando = 0;
     cfg.custos_dia.forEach(function (i) {
+      if (data && !P.itemVale(i, data)) return;
       pedindo += c(i.valor);
-      if (!i.marmita) levando += c(i.valor);
+      if (i.tipo !== "marmita") levando += c(i.valor);
     });
     return { pedindo: r(pedindo), levando: r(levando) };
   };
@@ -117,15 +187,10 @@
       var info = dias[d] || {};
       var trab = P.trabalha(d, cfg, dias);
       var marmita = trab && !!info.marmita;
-      var itens = [];
-      var custo = 0;
-      if (trab) {
-        cfg.custos_dia.forEach(function (i) {
-          if (marmita && i.marmita) return;
-          custo += c(i.valor);
-          itens.push({ nome: i.nome, valor: Number(i.valor) || 0 });
-        });
-      }
+      var semTransporte = trab && !!info.sem_transporte;
+      var detalhe = trab ? P.custosDoDia(cfg, d, info) : [];
+      var itens = detalhe.filter(function (i) { return !i.fora && i.valor; });
+      var custo = itens.reduce(function (t, i) { return t + c(i.valor); }, 0);
       var lanc = porDia[d] || [];
       var entradas = lanc.filter(function (l) { return l.tipo === "entrada"; });
       var saidas = lanc.filter(function (l) { return l.tipo === "saida"; });
@@ -139,6 +204,11 @@
         trabalha: trab,
         padrao: P.trabalhaPadrao(d, cfg),
         marmita: marmita,
+        semTransporte: semTransporte,
+        nomeTransporte: P.nomeTransporte(cfg, d),
+        temMarmita: detalhe.some(function (i) { return i.tipo === "marmita"; }),
+        ajustado: detalhe.some(function (i) { return i.ajustado; }),
+        detalheDia: detalhe,
         motivo: info.motivo || "",
         entra: r(entra),
         custoDia: r(custo),
@@ -246,7 +316,8 @@
       saldoTotalFim: r(c(saldoFim) + c(caixinha)),
       menor: minimo || { data: ontem, saldo: conta },
       diasTrabalhados: linhasMes.filter(function (l) { return l.trabalha; }).length,
-      diasMarmita: linhasMes.filter(function (l) { return l.marmita; }).length
+      diasMarmita: linhasMes.filter(function (l) { return l.marmita; }).length,
+      diasSemTransporte: linhasMes.filter(function (l) { return l.semTransporte; }).length
     };
 
     // Depois do fim do mês (Resumo!B46:B47)
@@ -267,7 +338,7 @@
         disponivel: r(c(conta) + c(caixinha)),
         data: saldo.data
       },
-      custo: P.custoPorDia(cfg),
+      custo: P.custoPorDia(cfg, inicio),
       semana: semana,
       semanas: semanas,
       mes: mes,

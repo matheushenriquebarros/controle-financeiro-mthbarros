@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dia a dia | Controle MB</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1c1917">
+  <script src="/assets/js/marca.js"></script>
+  <link rel="icon" href="/img/favicon.ico" sizes="any">
+  <link rel="icon" href="/img/favicon.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/painel.css">
+  <link rel="stylesheet" href="/assets/css/fellowship.css">
+</head>
+<body>
+  <header class="topo" id="topo"></header>
+
+  <main class="pagina">
+    <div class="pagina-cabecalho">
+      <div>
+        <span class="rotulo">Dia a dia · projeção</span>
+        <h1 id="titulo-mes">Mês</h1>
+      </div>
+      <div class="navegar-mes">
+        <button class="botao-icone" type="button" id="mes-anterior" aria-label="Mês anterior" title="Mês anterior"><span data-icone="anterior"></span></button>
+        <input class="campo" id="mes" type="month" aria-label="Escolher mês">
+        <button class="botao-icone" type="button" id="mes-seguinte" aria-label="Próximo mês" title="Próximo mês"><span data-icone="proximo"></span></button>
+      </div>
+    </div>
+
+    <div class="indicadores" id="indicadores"></div>
+
+    <section class="cartao">
+      <div class="cartao-cabecalho">
+        <h2>Dia a dia</h2>
+        <p>Toque em <b>Trabalha</b> para marcar folga e em <b>Marmita</b> quando levar de casa</p>
+      </div>
+      <div class="vazio pequeno" id="aviso-passado" hidden></div>
+      <div class="tabela-rolagem">
+        <table class="tabela tabela-diario" id="tabela"></table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/assets/vendor/supabase-js-2.45.4.js"></script>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/projecao.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/diario.js"></script>
+</body>
+</html>

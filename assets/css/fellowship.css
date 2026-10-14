@@ -1,0 +1,276 @@
+/* =====================================================================
+   Marca Fellow Ship (controle.agenciafellowship.com.br).
+   Só vale com html[data-marca="fellowship"] — o controle MB não muda.
+   Identidade do agenciafellowship.com.br: azul-marinho + azul oceano,
+   Fraunces nos títulos, Inter no texto, cantos arredondados, navio.
+   Claro é o padrão (como o site); o escuro é o marinho do topo do site.
+   ===================================================================== */
+
+/* ---------- Tema escuro: marinho ---------- */
+:root[data-marca="fellowship"] {
+  --marinho: oklch(24.6% .062 264.5);
+  --oceano: oklch(44% .11 262);
+  --creme: oklch(96.5% .004 95);
+
+  --tinta: 96.5% .004 95;
+  --fundo-lch: 21% .055 265;
+  --superficie-lch: 25.5% .062 265;
+  --superficie-2: oklch(30.5% .068 264);
+  --texto: var(--creme);
+  --texto-botao: var(--marinho);
+  --suave: oklch(80% .03 262);
+  --apagado: oklch(64% .035 262);
+  --linha: oklch(var(--tinta) / .1);
+  --linha-campo: oklch(var(--tinta) / .16);
+  --sombra: 0 16px 48px oklch(10% .04 265 / .5);
+  --brilho: oklch(44% .11 262 / .55);
+
+  --ember: oklch(76% .1 252);         /* realce: azul claro sobre o marinho */
+  --ember-suave: oklch(80% .08 252);
+  --ember-fundo: oklch(76% .1 252 / .13);
+  --ember-anel: oklch(76% .1 252 / .55);
+  --ok: oklch(78% .12 165);
+  --ok-fundo: oklch(78% .12 165 / .12);
+  --erro: oklch(72% .16 25);
+  --erro-fundo: oklch(64% .19 25 / .14);
+
+  --botao-fundo: var(--creme);
+  --botao-texto: var(--marinho);
+  --botao-hover: oklch(89% .03 255);
+
+  --bloco-venda: oklch(82% .11 82);
+  --bloco-empresa: oklch(62% .03 262);
+  --bloco-execucao: oklch(66% .14 256);
+  --bloco-societaria: oklch(77% .09 195);
+
+  --fonte-texto: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --fonte-titulo: "Fraunces", Georgia, serif;
+  --fonte-mono: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --raio: .7rem;
+  --raio-cartao: 1.1rem;
+}
+
+/* ---------- Tema claro: branco + marinho (padrão) ---------- */
+:root[data-marca="fellowship"][data-theme="light"] {
+  --tinta: 24.6% .062 264.5;
+  --fundo-lch: 97.3% .005 260;
+  --superficie-lch: 100% 0 0;
+  --superficie-2: oklch(95% .012 260);
+  --texto: var(--marinho);
+  --texto-botao: #fff;
+  --suave: oklch(50% .03 262);
+  --apagado: oklch(63% .025 262);
+  --linha: oklch(var(--tinta) / .1);
+  --linha-campo: oklch(var(--tinta) / .17);
+  --sombra: 0 16px 44px oklch(24.6% .062 264.5 / .1);
+  --brilho: oklch(44% .11 262 / .16);
+
+  --ember: var(--oceano);
+  --ember-suave: oklch(40% .1 262);
+  --ember-fundo: oklch(44% .11 262 / .08);
+  --ember-anel: oklch(44% .11 262 / .45);
+  --ok: oklch(48% .1 165);
+  --ok-fundo: oklch(60% .12 165 / .1);
+  --erro: oklch(52% .2 27);
+  --erro-fundo: oklch(57.7% .245 27.3 / .07);
+
+  --botao-fundo: var(--marinho);
+  --botao-texto: #fff;
+  --botao-hover: var(--oceano);
+
+  --bloco-venda: oklch(74% .13 76);
+  --bloco-empresa: oklch(74% .02 260);
+  --bloco-execucao: var(--oceano);
+  --bloco-societaria: oklch(62% .1 196);
+}
+
+/* ---------- Tipografia ---------- */
+:root[data-marca="fellowship"] body { font-feature-settings: "tnum" 1; }
+:root[data-marca="fellowship"] h1,
+:root[data-marca="fellowship"] h2,
+:root[data-marca="fellowship"] h3 { font-weight: 600; letter-spacing: -.02em; line-height: 1.08; }
+
+/* Números grandes em Fraunces, como os títulos do site */
+:root[data-marca="fellowship"] .resumo-lucro .valor-grande,
+:root[data-marca="fellowship"] .indicador strong,
+:root[data-marca="fellowship"] .socio-total .total { font-weight: 600; letter-spacing: -.02em; }
+:root[data-marca="fellowship"] .marca strong,
+:root[data-marca="fellowship"] .vazio strong,
+:root[data-marca="fellowship"] .legenda dd { font-weight: 600; }
+
+/* Rótulos: caixa-alta em Inter, azul oceano (o "Nossos serviços" do site) */
+:root[data-marca="fellowship"] .rotulo {
+  gap: .6rem;
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  color: var(--ember);
+}
+:root[data-marca="fellowship"] .rotulo::before { width: 1.5rem; background: currentColor; opacity: .7; }
+:root[data-marca="fellowship"] .grupo > label,
+:root[data-marca="fellowship"] .legenda-campo,
+:root[data-marca="fellowship"] .tabela th,
+:root[data-marca="fellowship"] .indicador span,
+:root[data-marca="fellowship"] .marca small,
+:root[data-marca="fellowship"] .usuario-linha .marcador { font-weight: 600; letter-spacing: .12em; }
+
+/* ---------- Logo (navio como máscara, pega a cor do texto) ---------- */
+:root[data-marca="fellowship"] .marca .logo-fs {
+  display: block;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask: url("/img/marca/fellowship-navio.png") no-repeat center / contain;
+  mask: url("/img/marca/fellowship-navio.png") no-repeat center / contain;
+  transition: transform .3s;
+}
+:root[data-marca="fellowship"] .marca .logo-fs.navio { width: 2.6rem; height: 2.3rem; }
+:root[data-marca="fellowship"] .marca .logo-fs.horizontal {
+  height: 2.5rem;
+  aspect-ratio: 600 / 194;
+  -webkit-mask-image: url("/img/marca/fellowship-logo.png");
+  mask-image: url("/img/marca/fellowship-logo.png");
+}
+:root[data-marca="fellowship"] .marca:hover .logo-fs { transform: scale(1.04); }
+:root[data-marca="fellowship"] .marca-nome { display: none; }
+
+/* ---------- Botões ---------- */
+:root[data-marca="fellowship"] .botao {
+  background: var(--botao-fundo);
+  color: var(--botao-texto);
+  font-weight: 600;
+  transition: background-color .2s, border-color .2s, color .2s, opacity .2s, transform .2s;
+}
+:root[data-marca="fellowship"] .botao:hover { background: var(--botao-hover); transform: scale(1.02); }
+:root[data-marca="fellowship"] .botao:disabled:hover { transform: none; background: var(--botao-fundo); }
+:root[data-marca="fellowship"] .botao.contorno { background: transparent; border-color: oklch(var(--tinta) / .25); color: var(--texto); }
+:root[data-marca="fellowship"] .botao.contorno:hover { background: oklch(var(--tinta) / .08); color: var(--texto); }
+:root[data-marca="fellowship"] .botao.fantasma { background: transparent; color: var(--texto); }
+:root[data-marca="fellowship"] .botao.fantasma:hover { background: var(--superficie-2); }
+:root[data-marca="fellowship"] .botao-icone.perigo:hover { color: var(--erro); border-color: var(--erro); }
+
+/* ---------- Campos ---------- */
+:root[data-marca="fellowship"] .campo,
+:root[data-marca="fellowship"] .selecao { background-color: oklch(var(--superficie-lch)); }
+:root[data-marca="fellowship"][data-theme="light"] .campo,
+:root[data-marca="fellowship"][data-theme="light"] .selecao { background-color: #fff; }
+:root[data-marca="fellowship"] .campo:focus,
+:root[data-marca="fellowship"] .selecao:focus { border-color: var(--ember); }
+
+/* ---------- Erros ficam vermelhos (no MB o vermelho era a cor da marca) ---------- */
+:root[data-marca="fellowship"] .alerta { border-color: oklch(from var(--erro) l c h / .4); background: var(--erro-fundo); }
+:root[data-marca="fellowship"] .alerta.ok { border-color: oklch(from var(--ok) l c h / .4); background: var(--ok-fundo); }
+:root[data-marca="fellowship"] .alerta.neutro { border-color: var(--linha); background: var(--superficie); }
+:root[data-marca="fellowship"] .toast { border-radius: var(--raio); }
+:root[data-marca="fellowship"] .toast.erro { border-color: var(--erro); color: var(--erro); }
+:root[data-marca="fellowship"] .soma-pct.erro { border-color: var(--erro); }
+:root[data-marca="fellowship"] .soma-pct.erro strong,
+:root[data-marca="fellowship"] .resumo-lucro .valor-grande.negativo,
+:root[data-marca="fellowship"] .item-edicao .soma-mini.erro { color: var(--erro); }
+:root[data-marca="fellowship"] .etiqueta.pago { border-color: oklch(from var(--ok) l c h / .45); }
+
+/* ---------- Cartões: brancos, arredondados, borda fina e sombra leve ---------- */
+:root[data-marca="fellowship"] .cartao,
+:root[data-marca="fellowship"] .dialogo { border-radius: var(--raio-cartao); }
+:root[data-marca="fellowship"][data-theme="light"] .cartao { box-shadow: 0 1px 2px oklch(24.6% .062 264.5 / .04), 0 8px 24px oklch(24.6% .062 264.5 / .04); }
+:root[data-marca="fellowship"] .dialogo { box-shadow: var(--sombra); }
+:root[data-marca="fellowship"] .dialogo::backdrop { background: oklch(18% .05 265 / .55); }
+:root[data-marca="fellowship"] .indicador.destaque-ember { border-color: oklch(from var(--ember) l c h / .45); }
+:root[data-marca="fellowship"] .indicador.destaque-ember strong { color: var(--ember); }
+:root[data-marca="fellowship"] .executor.ativo { background: var(--ember-fundo); }
+:root[data-marca="fellowship"] .cartao-cabecalho .indice { font-weight: 600; }
+
+/* ---------- Topo do painel ---------- */
+:root[data-marca="fellowship"] .topo-link.ativo { background: var(--ember-fundo); }
+:root[data-marca="fellowship"][data-theme="light"] .topo { background: oklch(100% 0 0 / .86); }
+
+/* ---------- Tela de entrada: o "mar aberto" do site ---------- */
+:root[data-marca="fellowship"] .malha { display: none; }
+:root[data-marca="fellowship"] .brilho {
+  top: -14rem;
+  left: -12rem;
+  right: auto;
+  width: 60rem;
+  height: 40rem;
+  background: radial-gradient(closest-side, var(--brilho), transparent);
+  filter: none;
+}
+:root[data-marca="fellowship"] .pagina-entrar::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -4rem;
+  width: min(42rem, 80vw);
+  aspect-ratio: 360 / 312;
+  transform: translateY(-50%);
+  background-color: var(--texto);
+  opacity: .05;
+  -webkit-mask: url("/img/marca/fellowship-navio.png") no-repeat center / contain;
+  mask: url("/img/marca/fellowship-navio.png") no-repeat center / contain;
+  pointer-events: none;
+}
+:root[data-marca="fellowship"][data-theme="light"] .pagina-entrar::before { opacity: .045; }
+:root[data-marca="fellowship"] .entrar-topo .marca { color: var(--texto); }
+:root[data-marca="fellowship"] .entrar-apresentacao h1 { line-height: 1.02; letter-spacing: -.025em; }
+:root[data-marca="fellowship"] .entrar-passos { font-family: var(--fonte-texto); font-size: .9rem; }
+:root[data-marca="fellowship"] .entrar-passos span { font-weight: 700; }
+:root[data-marca="fellowship"] .entrar-cartao {
+  padding: 2.25rem;
+  border-radius: 1.4rem;
+  box-shadow: var(--sombra);
+}
+:root[data-marca="fellowship"][data-theme="light"] .entrar-cartao { background: oklch(100% 0 0 / .9); }
+:root[data-marca="fellowship"] .abas button[aria-selected="true"] { background: var(--botao-fundo); color: var(--botao-texto); font-weight: 600; }
+:root[data-marca="fellowship"] .entrar-rodape { font-weight: 500; }
+
+@media (max-width: 480px) {
+  :root[data-marca="fellowship"] .entrar-cartao { padding: 1.4rem; }
+  :root[data-marca="fellowship"] .marca .logo-fs.horizontal { height: 2.1rem; }
+}
+
+/* ---------- Específico do controle ---------- */
+/* Saldo negativo e "a sair" em vermelho (o azul é só realce). */
+:root[data-marca="fellowship"] .negativo,
+:root[data-marca="fellowship"] .valor-grande.negativo { color: var(--erro); }
+:root[data-marca="fellowship"] .indicador.destaque-ember { border-color: oklch(from var(--erro) l c h / .4); }
+:root[data-marca="fellowship"] .indicador.destaque-ember strong { color: var(--erro); }
+:root[data-marca="fellowship"] .valor-grande,
+:root[data-marca="fellowship"] .lista-valores dd,
+:root[data-marca="fellowship"] .tabela-diario td.saldo { font-weight: 600; letter-spacing: -.02em; }
+:root[data-marca="fellowship"] .aviso-saldo > svg { color: var(--erro); }
+
+/* Gráfico: linha oceano, menor saldo em vermelho */
+:root[data-marca="fellowship"] .grafico .ponto-minimo { fill: var(--erro); }
+:root[data-marca="fellowship"] .grafico .zero { stroke: oklch(from var(--erro) l c h / .55); }
+:root[data-marca="fellowship"] .grafico-dica { border-radius: var(--raio); }
+
+/* Dia a dia: folga em vermelho, marmita no azul */
+:root[data-marca="fellowship"] .alternar.folga { border-color: oklch(from var(--erro) l c h / .5); color: var(--erro); }
+:root[data-marca="fellowship"] .alternar.folga::before { background: var(--erro); }
+:root[data-marca="fellowship"] .tabela-diario tr.hoje { box-shadow: inset 3px 0 0 var(--ember); }
+:root[data-marca="fellowship"] .tabela-diario td.dia strong,
+:root[data-marca="fellowship"] .tabela-diario td.dia small { font-weight: 600; }
+
+/* Etiquetas e somas */
+:root[data-marca="fellowship"] .tag.previsto,
+:root[data-marca="fellowship"] .tag.no-saldo { font-weight: 600; }
+:root[data-marca="fellowship"] .item-soma,
+:root[data-marca="fellowship"] .resumo-conta,
+:root[data-marca="fellowship"] .beneficio-conta { font-size: .82rem; }
+:root[data-marca="fellowship"] .grafico .grade text,
+:root[data-marca="fellowship"] .grafico .eixo-x text { font-size: 11px; }
+
+/* ---------- Página principal (antes do login) ---------- */
+:root[data-marca="fellowship"] .previa,
+:root[data-marca="fellowship"] .chamada { border-radius: 1.4rem; }
+:root[data-marca="fellowship"] .recurso { border-radius: var(--raio-cartao); }
+:root[data-marca="fellowship"][data-theme="light"] .previa { background: oklch(100% 0 0 / .9); }
+:root[data-marca="fellowship"][data-theme="light"] .recurso { box-shadow: 0 1px 2px oklch(24.6% .062 264.5 / .04), 0 8px 24px oklch(24.6% .062 264.5 / .04); }
+:root[data-marca="fellowship"] .previa-valor,
+:root[data-marca="fellowship"] .previa-numeros dd { font-weight: 600; letter-spacing: -.02em; }
+:root[data-marca="fellowship"] .previa-numeros dt,
+:root[data-marca="fellowship"] .previa-exemplo,
+:root[data-marca="fellowship"] .passo-num { font-weight: 700; letter-spacing: .1em; }
+:root[data-marca="fellowship"] .inicio-cabecalho h2,
+:root[data-marca="fellowship"] .chamada h2 { font-weight: 600; letter-spacing: -.02em; }
+:root[data-marca="fellowship"] .passos h3,
+:root[data-marca="fellowship"] .recurso h3 { font-weight: 600; }

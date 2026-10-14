@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Acessos | Controle MB</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1c1917">
+  <script src="/assets/js/marca.js"></script>
+  <link rel="icon" href="/img/favicon.ico" sizes="any">
+  <link rel="icon" href="/img/favicon.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/painel.css">
+  <link rel="stylesheet" href="/assets/css/fellowship.css">
+</head>
+<body>
+  <header class="topo" id="topo"></header>
+
+  <main class="pagina">
+    <div class="pagina-cabecalho">
+      <div>
+        <span class="rotulo">Administração</span>
+        <h1>Acessos ao controle</h1>
+      </div>
+    </div>
+
+    <section class="cartao">
+      <div class="cartao-cabecalho">
+        <h2>Contas cadastradas</h2>
+        <p>Cada pessoa vê só os próprios dados; quem cria conta só entra depois de aprovado</p>
+      </div>
+      <div id="lista-usuarios"></div>
+    </section>
+  </main>
+
+  <script src="/assets/vendor/supabase-js-2.45.4.js"></script>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/projecao.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/usuarios.js"></script>
+</body>
+</html>

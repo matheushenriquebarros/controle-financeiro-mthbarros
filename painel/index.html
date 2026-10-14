@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resumo | Controle MB</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1c1917">
+  <script src="/assets/js/marca.js"></script>
+  <link rel="icon" href="/img/favicon.ico" sizes="any">
+  <link rel="icon" href="/img/favicon.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/painel.css">
+  <link rel="stylesheet" href="/assets/css/fellowship.css">
+</head>
+<body>
+  <header class="topo" id="topo"></header>
+
+  <main class="pagina">
+    <div class="pagina-cabecalho">
+      <div>
+        <span class="rotulo" id="rotulo-mes">Controle financeiro</span>
+        <h1>Resumo <span class="suave">do mês</span></h1>
+      </div>
+      <div class="pagina-acoes">
+        <button class="botao" type="button" id="botao-saldo"><span data-icone="carteira"></span> Atualizar saldo</button>
+        <a class="botao fantasma" href="/painel/recebimentos/"><span data-icone="mais"></span> Recebimento</a>
+        <a class="botao fantasma" href="/painel/gastos/"><span data-icone="mais"></span> Gasto</a>
+      </div>
+    </div>
+
+    <div class="alerta aviso-saldo" id="aviso-saldo" hidden></div>
+
+    <!-- Onde você está hoje -->
+    <div class="indicadores" id="hoje"></div>
+
+    <!-- Fim do mês + gráfico -->
+    <section class="cartao fim-mes">
+      <div class="cartao-cabecalho">
+        <h2><span data-icone="resumo"></span>Saldo da conta até o fim do mês</h2>
+        <p id="periodo"></p>
+      </div>
+      <div class="fim-mes-topo">
+        <div>
+          <span class="rotulo" id="rotulo-fim">Último dia do mês</span>
+          <strong class="valor-grande" id="saldo-fim">R$ 0,00</strong>
+        </div>
+        <div class="resumo-conta" id="conta-fim"></div>
+      </div>
+      <div class="grafico" id="grafico" role="img" aria-label="Saldo projetado da conta, dia a dia"></div>
+      <div class="grafico-legenda" id="grafico-legenda"></div>
+    </section>
+
+    <div class="duas-colunas">
+      <section class="cartao">
+        <div class="cartao-cabecalho">
+          <h2>Esta semana</h2>
+          <p id="semana-periodo"></p>
+        </div>
+        <dl class="lista-valores" id="semana"></dl>
+      </section>
+
+      <section class="cartao">
+        <div class="cartao-cabecalho">
+          <h2>Mês, de agora até o fim</h2>
+          <p id="mes-periodo"></p>
+        </div>
+        <dl class="lista-valores" id="mes"></dl>
+      </section>
+    </div>
+
+    <section class="cartao" style="margin-top:1.5rem">
+      <div class="cartao-cabecalho">
+        <h2>Semana por semana</h2>
+        <p>Segunda a domingo · saldo da conta no fim de cada semana</p>
+      </div>
+      <div class="tabela-rolagem">
+        <table class="tabela tabela-semanas" id="semanas"></table>
+      </div>
+    </section>
+
+    <div class="duas-colunas" style="margin-top:1.5rem">
+      <div class="empilhado">
+        <section class="cartao">
+          <div class="cartao-cabecalho">
+            <h2>Depois do fim do mês</h2>
+            <p>Já agendado</p>
+          </div>
+          <dl class="lista-valores" id="depois"></dl>
+        </section>
+
+        <section class="cartao">
+          <div class="cartao-cabecalho">
+            <h2>Vale e ajuda de custo</h2>
+            <p id="beneficio-mes"></p>
+          </div>
+          <div class="cartao-corpo beneficio" id="beneficio"></div>
+        </section>
+      </div>
+
+      <section class="cartao">
+        <div class="cartao-cabecalho">
+          <h2>Premissas</h2>
+          <p><a class="link" href="/painel/ajustes/">Mudar nos ajustes</a></p>
+        </div>
+        <ol class="premissas" id="premissas"></ol>
+      </section>
+    </div>
+  </main>
+
+  <script src="/assets/vendor/supabase-js-2.45.4.js"></script>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/projecao.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/grafico.js"></script>
+  <script src="/assets/js/resumo.js"></script>
+</body>
+</html>

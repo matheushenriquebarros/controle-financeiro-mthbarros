@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nova senha | Controle MB</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1c1917">
+  <script src="/assets/js/marca.js"></script>
+  <link rel="icon" href="/img/favicon.ico" sizes="any">
+  <link rel="icon" href="/img/favicon.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/entrar.css">
+  <link rel="stylesheet" href="/assets/css/fellowship.css">
+</head>
+<body class="pagina-entrar">
+  <div class="malha" aria-hidden="true"></div>
+  <div class="brilho" aria-hidden="true"></div>
+
+  <header class="entrar-topo">
+    <a class="marca" href="/">
+      <img src="/img/marca/logo-mb.webp" alt="Logo MB de Matheus Henrique Barros" width="40" height="40" data-marca-logo="horizontal">
+      <span class="marca-nome" data-marca-nome>Matheus Henrique Barros</span>
+    </a>
+    <span data-lugar-tema></span>
+  </header>
+
+  <main class="entrar">
+    <section class="entrar-apresentacao">
+      <span class="rotulo">Controle pessoal · Acesso</span>
+      <h1>
+        <span>Crie uma</span>
+        <span>senha <span class="destaque">nova</span>.</span>
+      </h1>
+    </section>
+
+    <section class="entrar-cartao">
+      <form id="form-senha" class="formulario" novalidate>
+        <div class="grupo">
+          <label for="nova-senha">Nova senha</label>
+          <input class="campo" id="nova-senha" type="password" autocomplete="new-password" minlength="8" required>
+        </div>
+        <div class="grupo">
+          <label for="repetir-senha">Repita a senha</label>
+          <input class="campo" id="repetir-senha" type="password" autocomplete="new-password" minlength="8" required>
+        </div>
+        <button class="botao" type="submit">Salvar senha</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="/assets/vendor/supabase-js-2.45.4.js"></script>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script>
+    /* O link do e-mail já abre esta página com a sessão de recuperação ativa. */
+    (function () {
+      "use strict";
+      var form = document.getElementById("form-senha");
+      form.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var senha = document.getElementById("nova-senha").value;
+        if (senha.length < 8) return MB.aviso("A senha precisa ter pelo menos 8 caracteres.", true);
+        if (senha !== document.getElementById("repetir-senha").value) return MB.aviso("As senhas não são iguais.", true);
+        if (!MB.supabase) return MB.aviso("Supabase não configurado.", true);
+        MB.supabase.auth.updateUser({ password: senha }).then(function (r) {
+          if (r.error) throw r.error;
+          MB.aviso("Senha alterada. Entrando…");
+          setTimeout(function () { location.href = "/painel/"; }, 900);
+        }).catch(MB.erro);
+      });
+    })();
+  </script>
+</body>
+</html>

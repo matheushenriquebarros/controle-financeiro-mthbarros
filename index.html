@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Controle financeiro | Controle MB</title>
+  <meta name="description" content="Controle financeiro pessoal: saldo de hoje, recebimentos, gastos e a projeção dia a dia até o fim do mês.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1c1917">
+  <script src="/assets/js/marca.js"></script>
+  <link rel="icon" href="/img/favicon.ico" sizes="any">
+  <link rel="icon" href="/img/favicon.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/entrar.css">
+  <link rel="stylesheet" href="/assets/css/inicio.css">
+  <link rel="stylesheet" href="/assets/css/fellowship.css">
+</head>
+<body class="pagina-entrar pagina-inicio">
+  <div class="malha" aria-hidden="true"></div>
+  <div class="brilho" aria-hidden="true"></div>
+
+  <header class="entrar-topo">
+    <a class="marca" href="/">
+      <img src="/img/marca/logo-mb.webp" alt="Logo MB de Matheus Henrique Barros" width="40" height="40" data-marca-logo="horizontal">
+      <span class="marca-nome" data-marca-nome>Matheus Henrique Barros</span>
+    </a>
+    <nav class="entrar-topo-acoes" aria-label="Página inicial">
+      <a class="link so-largo-inicio" href="#como-funciona">Como funciona</a>
+      <a class="link so-largo-inicio" href="#recursos">Recursos</a>
+      <span data-lugar-tema></span>
+      <a class="botao contorno pequeno" href="/entrar/" data-acesso>Entrar</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Herói -->
+    <section class="inicio-heroi">
+      <div class="entrar-apresentacao">
+        <span class="rotulo">Controle financeiro pessoal</span>
+        <h1>
+          <span>Seu dinheiro</span>
+          <span class="suave">dia a dia, sem</span>
+          <span><span class="destaque">surpresa</span>.</span>
+        </h1>
+        <p class="suave">Informe o saldo de hoje, lance o que vai entrar e sair, e veja quanto vai sobrar em cada dia até o fim do mês, já contando marmita, Uber e folgas.</p>
+        <div class="inicio-botoes">
+          <a class="botao" href="/entrar/" data-acesso>Entrar no controle <span data-icone="seta"></span></a>
+          <a class="botao fantasma" href="/entrar/?aba=cadastro" data-cadastro>Criar conta</a>
+        </div>
+      </div>
+
+      <!-- Prévia do painel (exemplo) -->
+      <figure class="previa" aria-label="Exemplo do resumo do mês">
+        <div class="previa-topo">
+          <span class="rotulo">Saldo em 31 de outubro</span>
+          <span class="previa-exemplo">Exemplo</span>
+        </div>
+        <strong class="previa-valor">R$ 1.459,00</strong>
+        <svg class="previa-grafico" viewBox="0 0 300 96" preserveAspectRatio="none" aria-hidden="true">
+          <path class="previa-area" d="M0 70 L12 74 L24 80 L36 54 L48 50 L60 50 L84 56 L96 58 L108 34 L132 34 L156 40 L168 42 L180 18 L204 18 L228 24 L252 30 L264 6 L300 6 L300 96 L0 96 Z"/>
+          <path class="previa-linha" d="M0 70 L12 74 L24 80 L36 54 L48 50 L60 50 L84 56 L96 58 L108 34 L132 34 L156 40 L168 42 L180 18 L204 18 L228 24 L252 30 L264 6 L300 6"/>
+          <circle class="previa-minimo" cx="24" cy="80" r="4"/>
+        </svg>
+        <dl class="previa-numeros">
+          <div><dt>Entra</dt><dd class="entrada-valor">R$ 2.200</dd></div>
+          <div><dt>Sai</dt><dd>R$ 1.195</dd></div>
+          <div><dt>Menor saldo</dt><dd>R$ 299</dd></div>
+        </dl>
+      </figure>
+    </section>
+
+    <!-- Como funciona -->
+    <section class="inicio-secao" id="como-funciona">
+      <div class="inicio-cabecalho">
+        <span class="rotulo">Como funciona</span>
+        <h2>A mesma conta da planilha, <span class="suave">feita sozinha.</span></h2>
+      </div>
+      <ol class="passos">
+        <li>
+          <span class="passo-num">01</span>
+          <h3>Saldo de hoje</h3>
+          <p class="suave">Olhe o app do banco e informe quanto tem na conta e na caixinha. Tudo até hoje já está dentro desse valor.</p>
+        </li>
+        <li>
+          <span class="passo-num">02</span>
+          <h3>O que vai entrar e sair</h3>
+          <p class="suave">Lance recebimentos e gastos com data, uma vez ou repetindo toda semana ou todo mês.</p>
+        </li>
+        <li>
+          <span class="passo-num">03</span>
+          <h3>Saldo de cada dia</h3>
+          <p class="suave">O painel desconta marmita e Uber nos dias trabalhados e mostra o saldo dia a dia até o fim do mês.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Recursos -->
+    <section class="inicio-secao" id="recursos">
+      <div class="inicio-cabecalho">
+        <span class="rotulo">No painel</span>
+        <h2>Tudo o que você precisa <span class="suave">pra não ficar no vermelho.</span></h2>
+      </div>
+      <div class="recursos">
+        <article class="recurso">
+          <span class="recurso-icone" data-icone="resumo"></span>
+          <h3>Resumo do mês</h3>
+          <p class="suave">Saldo previsto no último dia, menor saldo do mês, esta semana e semana por semana, com gráfico.</p>
+        </article>
+        <article class="recurso">
+          <span class="recurso-icone" data-icone="diario"></span>
+          <h3>Dia a dia</h3>
+          <p class="suave">Marque folga, feriado ou o dia em que levou marmita, e o saldo se ajusta na hora.</p>
+        </article>
+        <article class="recurso">
+          <span class="recurso-icone" data-icone="recebimentos"></span>
+          <h3>Recebimentos</h3>
+          <p class="suave">Salário, freela, Pix. O vale e a ajuda de custo são calculados pelos dias trabalhados.</p>
+        </article>
+        <article class="recurso">
+          <span class="recurso-icone" data-icone="gastos"></span>
+          <h3>Gastos</h3>
+          <p class="suave">Contas, cartão, assinaturas e extras, separados por categoria e exportáveis para o Excel.</p>
+        </article>
+        <article class="recurso">
+          <span class="recurso-icone" data-icone="ajustes"></span>
+          <h3>Suas premissas</h3>
+          <p class="suave">Dias de trabalho, custo de cada dia e dia do vale: mude uma vez e a conta toda acompanha.</p>
+        </article>
+        <article class="recurso">
+          <span class="recurso-icone" data-icone="usuarios"></span>
+          <h3>Só você vê</h3>
+          <p class="suave">Login com e-mail e senha. Cada conta enxerga só os próprios números.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Chamada final -->
+    <section class="inicio-secao">
+      <div class="chamada">
+        <div>
+          <h2>Comece pelo saldo de hoje.</h2>
+          <p class="suave">Leva um minuto. O resto o painel calcula.</p>
+        </div>
+        <a class="botao" href="/entrar/" data-acesso>Entrar no controle <span data-icone="seta"></span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="entrar-rodape mono">© <span id="ano"></span> <span data-marca-nome>Matheus Henrique Barros</span> · <span data-marca-dominio>controle.mthbarros.com.br</span></footer>
+
+  <script src="/assets/vendor/supabase-js-2.45.4.js"></script>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/inicio.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+/* =====================================================================
+   Página principal do controle (antes do login). Usa o mesmo herói da
+   tela de entrada (entrar.css) e as variáveis da marca; a Fellow Ship
+   ajusta cantos e sombras no fellowship.css.
+   ===================================================================== */
+
+.pagina-inicio main { position: relative; width: 100%; }
+.entrada-valor { color: var(--ok); }
+
+/* ---------- Herói ---------- */
+.inicio-heroi {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  align-items: center;
+  gap: 4rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 5rem;
+}
+.inicio-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-top: 2.25rem;
+  animation: surgir .9s .46s var(--curva) backwards;
+}
+.inicio-botoes .botao svg { width: 1rem; height: 1rem; }
+.entrar-topo-acoes .botao { text-decoration: none; }
+
+/* Prévia do painel */
+.previa {
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+  padding: 1.75rem;
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  background: oklch(var(--superficie-lch) / .82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--sombra);
+  animation: surgir .9s .3s var(--curva) backwards;
+}
+.previa-topo { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.previa-exemplo {
+  padding: .15rem .6rem;
+  border: 1px dashed var(--linha-campo);
+  border-radius: 999px;
+  font-family: var(--fonte-mono);
+  font-size: .62rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--apagado);
+}
+.previa-valor {
+  font-family: var(--fonte-titulo);
+  font-size: clamp(2.4rem, 4.5vw, 3.4rem);
+  font-weight: 500;
+  letter-spacing: -.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.previa-grafico { width: 100%; height: 6.5rem; overflow: visible; }
+.previa-area { fill: var(--ember-fundo); }
+.previa-linha { fill: none; stroke: var(--ember); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.previa-minimo { fill: var(--erro, var(--ember)); stroke: var(--superficie); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.previa-numeros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 0; padding-top: 1rem; border-top: 1px solid var(--linha); }
+.previa-numeros dt { font-family: var(--fonte-mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--suave); }
+.previa-numeros dd { margin: .25rem 0 0; font-family: var(--fonte-titulo); font-size: 1.15rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* ---------- Seções ---------- */
+.inicio-secao {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem;
+  border-top: 1px solid var(--linha);
+}
+.inicio-cabecalho { display: grid; gap: 1.25rem; max-width: 44rem; margin-bottom: 2.75rem; }
+.inicio-cabecalho h2 { font-size: clamp(1.9rem, 4vw, 3rem); letter-spacing: -.035em; }
+
+.passos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin: 0; padding: 0; list-style: none; }
+.passos li { display: grid; align-content: start; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--linha-campo); }
+.passo-num { font-family: var(--fonte-mono); font-size: .8rem; color: var(--ember); }
+.passos h3, .recurso h3 { font-size: 1.3rem; letter-spacing: -.02em; }
+.passos p, .recurso p { margin: 0; line-height: 1.6; }
+
+.recursos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.recurso {
+  display: grid;
+  align-content: start;
+  gap: .75rem;
+  padding: 1.6rem;
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  background: var(--superficie);
+  transition: border-color .2s, transform .3s var(--curva);
+}
+.recurso:hover { border-color: var(--ember-anel); transform: translateY(-2px); }
+.recurso-icone {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  background: var(--ember-fundo);
+  color: var(--ember);
+}
+.recurso > svg {
+  box-sizing: content-box;
+  width: 1.15rem;
+  height: 1.15rem;
+  padding: .72rem;
+  border-radius: 50%;
+  background: var(--ember-fundo);
+  color: var(--ember);
+}
+
+.chamada {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2.5rem;
+  border: 1px solid var(--ember-anel);
+  border-radius: var(--raio);
+  background: var(--ember-fundo);
+}
+.chamada h2 { font-size: clamp(1.7rem, 3.5vw, 2.5rem); letter-spacing: -.03em; }
+.chamada p { margin: .6rem 0 0; }
+.chamada .botao svg { width: 1rem; height: 1rem; }
+
+/* ---------- Telas menores ---------- */
+@media (max-width: 1000px) {
+  .inicio-heroi { grid-template-columns: 1fr; gap: 3rem; padding-top: 2rem; }
+  .recursos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .so-largo-inicio { display: none; }
+  .passos { grid-template-columns: 1fr; }
+  .recursos { grid-template-columns: 1fr; }
+  .inicio-secao { padding: 3.25rem 1rem; }
+  .chamada { padding: 1.75rem; }
+  .chamada .botao { width: 100%; }
+}
+@media (max-width: 480px) {
+  .inicio-heroi { padding: 1.5rem 1rem 3.5rem; }
+  .entrar-topo-acoes { gap: .75rem; }
+  .inicio-botoes .botao { flex: 1 1 auto; padding-left: 1rem; padding-right: 1rem; white-space: nowrap; }
+  .previa { padding: 1.25rem; }
+  .previa-numeros dd { font-size: 1rem; }
+}

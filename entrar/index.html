@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar | Controle MB</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1c1917">
+  <script src="/assets/js/marca.js"></script>
+  <link rel="icon" href="/img/favicon.ico" sizes="any">
+  <link rel="icon" href="/img/favicon.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/entrar.css">
+  <link rel="stylesheet" href="/assets/css/fellowship.css">
+</head>
+<body class="pagina-entrar">
+  <div class="malha" aria-hidden="true"></div>
+  <div class="brilho" aria-hidden="true"></div>
+
+  <header class="entrar-topo">
+    <a class="marca" href="/">
+      <img src="/img/marca/logo-mb.webp" alt="Logo MB de Matheus Henrique Barros" width="40" height="40" data-marca-logo="horizontal">
+      <span class="marca-nome" data-marca-nome>Matheus Henrique Barros</span>
+    </a>
+    <div class="entrar-topo-acoes">
+      <a class="link" href="/">Início</a>
+      <span data-lugar-tema></span>
+    </div>
+  </header>
+
+  <main class="entrar">
+    <section class="entrar-apresentacao">
+      <span class="rotulo">Controle pessoal · Finanças</span>
+      <h1>
+        <span>Seu dinheiro</span>
+        <span class="suave">dia a dia, sem</span>
+        <span><span class="destaque">surpresa</span>.</span>
+      </h1>
+      <p class="suave">Saldo, recebimentos, gastos e o custo de cada dia de trabalho: a mesma conta da planilha, projetada até o fim do mês.</p>
+      <ul class="entrar-passos mono">
+        <li><span>01</span> Saldo de hoje + o que vai entrar</li>
+        <li><span>02</span> − marmita, Uber e gastos lançados</li>
+        <li><span>03</span> Saldo de cada dia até o fim do mês</li>
+      </ul>
+    </section>
+
+    <section class="entrar-cartao" aria-live="polite">
+      <div class="alerta" id="aviso-config" hidden>
+        Falta conectar o Supabase: preencha <strong>assets/js/config.js</strong> com a URL e a chave publishable do projeto.
+      </div>
+
+      <!-- Entrar / Criar conta -->
+      <div id="painel-formularios">
+        <div class="abas" role="tablist">
+          <button type="button" role="tab" id="aba-entrar" aria-selected="true" aria-controls="form-entrar">Entrar</button>
+          <button type="button" role="tab" id="aba-cadastro" aria-selected="false" aria-controls="form-cadastro">Criar conta</button>
+        </div>
+
+        <form id="form-entrar" class="formulario" role="tabpanel" aria-labelledby="aba-entrar" novalidate>
+          <div class="grupo">
+            <label for="entrar-email">E-mail</label>
+            <input class="campo" id="entrar-email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="grupo">
+            <label for="entrar-senha">Senha</label>
+            <input class="campo" id="entrar-senha" name="senha" type="password" autocomplete="current-password" required>
+          </div>
+          <button class="botao" type="submit">Entrar no controle <span data-icone="seta"></span></button>
+          <button class="link link-botao" type="button" id="esqueci-senha">Esqueci minha senha</button>
+        </form>
+
+        <form id="form-cadastro" class="formulario" role="tabpanel" aria-labelledby="aba-cadastro" novalidate hidden>
+          <div class="grupo">
+            <label for="cadastro-nome">Nome</label>
+            <input class="campo" id="cadastro-nome" name="nome" type="text" autocomplete="name" required>
+          </div>
+          <div class="grupo">
+            <label for="cadastro-email">E-mail</label>
+            <input class="campo" id="cadastro-email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="grupo">
+            <label for="cadastro-senha">Senha</label>
+            <input class="campo" id="cadastro-senha" name="senha" type="password" autocomplete="new-password" minlength="8" required>
+          </div>
+          <button class="botao" type="submit">Criar conta <span data-icone="seta"></span></button>
+          <p class="nota suave">Depois do cadastro, o administrador libera o seu acesso.</p>
+        </form>
+      </div>
+
+      <!-- Mensagens de estado -->
+      <div id="estado" class="estado" hidden>
+        <span class="estado-icone" data-icone="ok"></span>
+        <h2 id="estado-titulo"></h2>
+        <p class="suave" id="estado-texto"></p>
+        <button class="botao fantasma pequeno" type="button" id="estado-voltar">Voltar</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="entrar-rodape mono">© <span id="ano"></span> <span data-marca-nome>Matheus Henrique Barros</span> · <span data-marca-dominio>controle.mthbarros.com.br</span></footer>
+
+  <script src="/assets/vendor/supabase-js-2.45.4.js"></script>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/projecao.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/entrar.js"></script>
+</body>
+</html>

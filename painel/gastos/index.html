@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gastos | Controle MB</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1c1917">
+  <script src="/assets/js/marca.js"></script>
+  <link rel="icon" href="/img/favicon.ico" sizes="any">
+  <link rel="icon" href="/img/favicon.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/painel.css">
+  <link rel="stylesheet" href="/assets/css/fellowship.css">
+</head>
+<body data-tipo="saida">
+  <header class="topo" id="topo"></header>
+
+  <main class="pagina">
+    <div class="pagina-cabecalho">
+      <div>
+        <span class="rotulo">Saídas</span>
+        <h1>Gastos</h1>
+      </div>
+      <div class="pagina-acoes">
+        <button class="botao fantasma" type="button" id="exportar"><span data-icone="baixar"></span> Exportar CSV</button>
+      </div>
+    </div>
+
+    <div class="indicadores" id="indicadores"></div>
+
+    <div class="lancamentos-grade">
+      <form class="cartao form-lancamento" id="form" novalidate>
+        <div class="cartao-cabecalho">
+          <h2 id="titulo-form">Lançar gasto</h2>
+          <p>Aluguel, contas, cartão, lanche extra…</p>
+        </div>
+        <div class="cartao-corpo">
+          <div class="linha-campos">
+            <div class="grupo">
+              <label for="valor">Valor</label>
+              <div class="campo-prefixo">
+                <span>R$</span>
+                <input class="campo num" id="valor" type="text" inputmode="decimal" placeholder="0,00" autocomplete="off" required>
+              </div>
+            </div>
+            <div class="grupo">
+              <label for="data">Data</label>
+              <input class="campo" id="data" type="date" required>
+            </div>
+          </div>
+
+          <div class="grupo">
+            <label for="descricao">O que foi</label>
+            <input class="campo" id="descricao" type="text" placeholder="Ex.: Lovable" autocomplete="off" required>
+          </div>
+
+          <div class="grupo">
+            <span class="legenda-campo">Categoria</span>
+            <div class="pilulas" id="categorias" role="radiogroup" aria-label="Categoria"></div>
+            <input class="campo" id="categoria-outra" type="text" placeholder="Nome da categoria" autocomplete="off" hidden aria-label="Nome da nova categoria">
+          </div>
+
+          <div class="repetir" id="bloco-repetir">
+            <div class="grupo">
+              <label for="repetir">Repetir</label>
+              <select class="selecao" id="repetir">
+                <option value="">Só uma vez</option>
+                <option value="7">Toda semana</option>
+                <option value="14">A cada 2 semanas</option>
+                <option value="mes">Todo mês</option>
+              </select>
+            </div>
+            <div class="grupo">
+              <label for="vezes">Vezes</label>
+              <input class="campo num" id="vezes" type="number" min="2" max="60" value="4" disabled>
+            </div>
+          </div>
+
+          <div class="grupo">
+            <label for="observacao">Observação <span class="suave">(opcional)</span></label>
+            <input class="campo" id="observacao" type="text" autocomplete="off">
+          </div>
+        </div>
+        <div class="cartao-rodape">
+          <button class="botao fantasma pequeno" type="button" id="cancelar-edicao" hidden><span data-icone="fechar"></span> Cancelar edição</button>
+          <button class="botao pequeno" type="submit" id="salvar"><span data-icone="ok"></span> <span>Lançar gasto</span></button>
+        </div>
+      </form>
+
+      <section class="cartao">
+        <div class="cartao-cabecalho">
+          <h2>Lançados</h2>
+          <p id="resumo-lista"></p>
+        </div>
+        <div class="filtros dentro-cartao">
+          <div class="grupo">
+            <label for="filtro-mes">Mês</label>
+            <input class="campo" id="filtro-mes" type="month">
+          </div>
+          <div class="grupo">
+            <label for="filtro-categoria">Categoria</label>
+            <select class="selecao" id="filtro-categoria"><option value="">Todas</option></select>
+          </div>
+          <div class="grupo largo">
+            <label for="filtro-busca">Buscar</label>
+            <input class="campo" id="filtro-busca" type="search" placeholder="Descrição ou observação">
+          </div>
+          <button class="botao fantasma pequeno" type="button" id="filtro-todos">Todos os meses</button>
+        </div>
+        <div class="por-categoria" id="por-categoria"></div>
+        <div class="tabela-rolagem">
+          <table class="tabela tabela-lancamentos" id="tabela"></table>
+        </div>
+        <div class="vazio" id="vazio" hidden>
+          <strong>Nada neste filtro</strong>
+          Lance o primeiro ao lado ou troque o mês.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="/assets/vendor/supabase-js-2.45.4.js"></script>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/projecao.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/lancamentos.js"></script>
+</body>
+</html>

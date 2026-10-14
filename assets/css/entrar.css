@@ -1,0 +1,175 @@
+/* =====================================================================
+   Tela de entrada (login, cadastro, aguardando aprovação, nova senha).
+   Mesmo herói do mthbarros.com.br: título grande em Space Grotesk,
+   segunda linha apagada e uma palavra em vermelho.
+   ===================================================================== */
+
+.pagina-entrar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.brilho {
+  position: absolute;
+  top: -12rem;
+  right: -10rem;
+  width: 36rem;
+  height: 36rem;
+  border-radius: 50%;
+  background: var(--brilho);
+  filter: blur(64px);
+  pointer-events: none;
+}
+
+.entrar-topo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+}
+.entrar-topo .marca {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  text-decoration: none;
+  font-family: var(--fonte-titulo);
+  font-size: .95rem;
+  letter-spacing: -.025em;
+}
+.entrar-topo .marca img { width: 2.5rem; height: 2.5rem; transition: transform .3s; }
+.entrar-topo .marca:hover img { transform: scale(1.05); }
+.entrar-topo .link { font-size: .875rem; }
+.entrar-topo-acoes { display: flex; align-items: center; gap: 1.25rem; }
+
+.entrar {
+  position: relative;
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  align-items: center;
+  gap: 4rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.entrar-apresentacao h1 {
+  margin-top: 2rem;
+  font-size: clamp(2.4rem, 6.4vw, 5.2rem);
+  line-height: .92;
+  letter-spacing: -.04em;
+}
+.entrar-apresentacao h1 > span { display: block; animation: surgir .9s var(--curva) backwards; }
+.entrar-apresentacao h1 > span:nth-child(2) { animation-delay: .12s; }
+.entrar-apresentacao h1 > span:nth-child(3) { animation-delay: .24s; }
+.entrar-apresentacao > p {
+  max-width: 34rem;
+  margin: 2.25rem 0 0;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  animation: surgir .9s .36s var(--curva) backwards;
+}
+@keyframes surgir { from { opacity: 0; transform: translateY(20px); } }
+
+.entrar-passos {
+  display: grid;
+  gap: .65rem;
+  margin: 2.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: .8rem;
+  color: var(--suave);
+  animation: surgir .9s .46s var(--curva) backwards;
+}
+.entrar-passos span { color: var(--ember); margin-right: .75rem; }
+
+.entrar-cartao {
+  position: relative;
+  display: grid;
+  gap: 1.25rem;
+  padding: 2rem;
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  background: oklch(var(--superficie-lch) / .82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.abas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: .25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--linha);
+  border-radius: 999px;
+}
+.abas button {
+  min-height: 2.4rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--suave);
+  font-size: .9rem;
+  cursor: pointer;
+  transition: background-color .2s, color .2s;
+}
+.abas button[aria-selected="true"] { background: var(--superficie-2); color: var(--texto); }
+
+.formulario { display: grid; gap: 1.1rem; }
+.formulario .botao { margin-top: .4rem; width: 100%; }
+.formulario .botao svg { width: 1rem; height: 1rem; }
+.formulario .nota { margin: 0; font-size: .82rem; text-align: center; }
+
+.link-botao {
+  justify-self: center;
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: .85rem;
+  cursor: pointer;
+}
+
+.estado { display: grid; justify-items: start; gap: .9rem; }
+.estado h2 { font-size: 1.75rem; }
+.estado p { margin: 0; line-height: 1.6; }
+.estado-icone {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--ember-fundo);
+  color: var(--ember);
+}
+.estado-icone svg { width: 1.25rem; height: 1.25rem; }
+
+.entrar-rodape {
+  position: relative;
+  padding: 1.5rem;
+  border-top: 1px solid var(--linha);
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--apagado);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .entrar { grid-template-columns: 1fr; gap: 2.5rem; padding-top: 1.5rem; }
+  .entrar-passos { display: none; }
+}
+
+@media (max-width: 480px) {
+  .entrar-topo { padding: 1rem; }
+  .entrar-topo .marca span { display: none; }
+  .entrar { padding: 1rem 1rem 3rem; }
+  .entrar-cartao { padding: 1.25rem; }
+}

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ajustes | Controle MB</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1c1917">
+  <script src="/assets/js/marca.js"></script>
+  <link rel="icon" href="/img/favicon.ico" sizes="any">
+  <link rel="icon" href="/img/favicon.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/painel.css">
+  <link rel="stylesheet" href="/assets/css/fellowship.css">
+</head>
+<body>
+  <header class="topo" id="topo"></header>
+
+  <main class="pagina">
+    <div class="pagina-cabecalho">
+      <div>
+        <span class="rotulo">Premissas</span>
+        <h1>Ajustes</h1>
+      </div>
+    </div>
+
+    <div class="duas-colunas">
+      <!-- Rotina de trabalho: vira a conta do dia a dia -->
+      <form class="cartao" id="form-config" novalidate>
+        <div class="cartao-cabecalho">
+          <h2>Rotina de trabalho</h2>
+          <p>Base da conta do dia a dia</p>
+        </div>
+        <div class="cartao-corpo">
+          <div class="grupo">
+            <span class="legenda-campo">Dias em que você trabalha</span>
+            <div class="pilulas" id="dias-semana" role="group" aria-label="Dias da semana trabalhados"></div>
+          </div>
+        </div>
+
+        <div class="cartao-cabecalho">
+          <h2>Gastos por dia trabalhado</h2>
+          <p>Marmita, Uber, estacionamento…</p>
+        </div>
+        <div id="custos"></div>
+        <div class="item-soma">
+          <button class="botao fantasma pequeno" type="button" id="mais-custo"><span data-icone="mais"></span> Adicionar gasto</button>
+          <span id="soma-custos"></span>
+        </div>
+
+        <div class="cartao-cabecalho">
+          <h2>Ganhos por dia trabalhado</h2>
+          <p>Vale alimentação, ajuda de custo…</p>
+        </div>
+        <div id="ganhos"></div>
+        <div class="item-soma">
+          <button class="botao fantasma pequeno" type="button" id="mais-ganho"><span data-icone="mais"></span> Adicionar ganho</button>
+          <span id="soma-ganhos"></span>
+        </div>
+        <div class="cartao-corpo">
+          <div class="grupo">
+            <label for="dia-beneficio">Dia do mês em que o vale cai</label>
+            <input class="campo num" id="dia-beneficio" type="number" min="1" max="31" style="max-width:8rem">
+            <small class="suave">O resumo sugere lançar o vale do mês: dias trabalhados × soma acima.</small>
+          </div>
+        </div>
+
+        <div class="cartao-rodape">
+          <span class="suave" id="estado-config" style="align-self:center;font-size:.85rem"></span>
+          <button class="botao pequeno" type="submit" id="salvar-config"><span data-icone="ok"></span> Salvar ajustes</button>
+        </div>
+      </form>
+
+      <div class="empilhado">
+        <section class="cartao">
+          <div class="cartao-cabecalho">
+            <h2>Saldo</h2>
+            <button class="botao pequeno" type="button" id="botao-saldo"><span data-icone="carteira"></span> Atualizar saldo</button>
+          </div>
+          <div id="saldos"></div>
+        </section>
+
+        <section class="cartao">
+          <div class="cartao-cabecalho">
+            <h2>Folgas e feriados</h2>
+            <p>Dias sem trabalho: não conta Uber nem marmita</p>
+          </div>
+          <div id="folgas"></div>
+          <form class="form-folga" id="form-folga" novalidate>
+            <input class="campo" id="folga-data" type="date" aria-label="Data da folga" required>
+            <input class="campo" id="folga-motivo" type="text" placeholder="Motivo (ex.: feriado)" aria-label="Motivo" autocomplete="off">
+            <button class="botao pequeno" type="submit"><span data-icone="mais"></span> Adicionar</button>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="/assets/vendor/supabase-js-2.45.4.js"></script>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/projecao.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/ajustes.js"></script>
+</body>
+</html>
